@@ -19,6 +19,7 @@ type ServerMessage = {
 	id?: string;
 	text?: string;
 	clientId?: string;
+	username?: string;
 	createdAt?: string;
 };
 
@@ -32,6 +33,9 @@ export default function ChatScreen() {
 	const socketRef = useRef<WebSocket | null>(null);
 	const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
 		null,
+	);
+	const usernameRef = useRef(
+		`User ${Math.floor(1000 + Math.random() * 9000)}`,
 	);
 
 	useEffect(() => {
@@ -90,6 +94,7 @@ export default function ChatScreen() {
 						text: serverMessage.text,
 						sender: isMyMessage ? "me" : "them",
 						clientId: serverMessage.clientId,
+						username: serverMessage.username,
 						createdAt: serverMessage.createdAt
 							? new Date(serverMessage.createdAt)
 							: new Date(),
@@ -161,6 +166,7 @@ export default function ChatScreen() {
 				type: "chat",
 				text: trimmedMessage,
 				clientId: clientIdRef.current,
+				username: usernameRef.current,
 			}),
 		);
 		setDraftMessage("");
@@ -171,6 +177,7 @@ export default function ChatScreen() {
 			<View style={styles.header}>
 				<Text style={styles.title}>Chat</Text>
 				<Text style={styles.subtitle}>
+					{usernameRef.current} ·{" "}
 					{connectionStatus === "connected" && "Connected"}
 					{connectionStatus === "connecting" && "Connecting..."}
 					{connectionStatus === "disconnected" && "Disconnected"}

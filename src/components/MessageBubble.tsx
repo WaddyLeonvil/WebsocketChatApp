@@ -7,6 +7,7 @@ type MessageBubbleProps = {
 
 export default function MessageBubble({ message }: MessageBubbleProps) {
 	const isMyMessage = message.sender === "me";
+	const shouldShowUsername = !isMyMessage && message.username;
 
 	return (
 		<View
@@ -14,6 +15,9 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
 				styles.messageBubble,
 				isMyMessage ? styles.myMessage : styles.theirMessage,
 			]}>
+			{shouldShowUsername && (
+				<Text style={styles.username}>{message.username}</Text>
+			)}
 			<Text
 				style={[
 					styles.messageText,
@@ -44,6 +48,12 @@ const styles = StyleSheet.create({
 		borderBottomLeftRadius: 4,
 		borderColor: "#e2e8f0",
 		borderWidth: 1,
+	},
+	username: {
+		color: "#64748b",
+		fontSize: 12,
+		fontWeight: "700",
+		marginBottom: 3,
 	},
 	messageText: {
 		fontSize: 16,

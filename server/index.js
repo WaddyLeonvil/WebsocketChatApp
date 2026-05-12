@@ -32,6 +32,10 @@ server.on("connection", (socket) => {
 				id: crypto.randomUUID(),
 				text: message.text,
 				clientId: message.clientId,
+				username:
+					typeof message.username === "string"
+						? message.username
+						: "Anonymous",
 				createdAt: new Date().toISOString(),
 			});
 		} catch (error) {

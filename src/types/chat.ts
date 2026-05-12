@@ -3,6 +3,7 @@ export type Message = {
 	text: string;
 	sender: "me" | "them";
 	clientId?: string;
+	username?: string;
 	createdAt: Date;
 };
 
