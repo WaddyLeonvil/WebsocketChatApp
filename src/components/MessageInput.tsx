@@ -4,31 +4,37 @@ type MessageInputProps = {
 	value: string;
 	onChangeText: (text: string) => void;
 	onSend: () => void;
+	disabled?: boolean;
 };
 
 export default function MessageInput({
 	value,
 	onChangeText,
 	onSend,
+	disabled = false,
 }: MessageInputProps) {
+	const isSendDisabled = disabled || value.trim() === "";
+
 	return (
 		<View style={styles.inputRow}>
 			<TextInput
+				editable={!disabled}
 				multiline
 				onChangeText={onChangeText}
 				onSubmitEditing={onSend}
-				placeholder="Type a message"
+				placeholder={disabled ? "Connecting..." : "Type a message"}
 				placeholderTextColor="#8a94a6"
 				returnKeyType="send"
 				style={styles.input}
 				value={value}
 			/>
 			<Pressable
+				disabled={isSendDisabled}
 				onPress={onSend}
 				style={({ pressed }) => [
 					styles.sendButton,
 					pressed && styles.sendButtonPressed,
-					value === "" && styles.sendButtonEmpty,
+					isSendDisabled && styles.sendButtonDisabled,
 				]}>
 				<Text style={styles.sendButtonText}>Send</Text>
 			</Pressable>
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
 	sendButtonPressed: {
 		opacity: 0.78,
 	},
-	sendButtonEmpty: {
+	sendButtonDisabled: {
 		opacity: 0.6,
 	},
 	sendButtonText: {
